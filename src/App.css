@@ -21,3 +21,7 @@
     font-size: calc(10px + 1vmin);
     color: white;
   }
+  .table{
+    border: 2px;
+    
+  }
