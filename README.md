@@ -1,7 +1,7 @@
 ##Create React App from scratch
 
 1. this project use npm for package manager.
-2. the goal of this project is to built a Sales Order Record web application using react.js with only class component
+2. the goal of this project is to built a Sales Order Record web application using react.js with class component and functional component
 3. as this is my first time creating react app without using CRA(create react app), i will create a step by step tutorial
 4. in this project, im using macbook pro, and vs code as tool.
 5. we will start by creating a folder, named the folder. then right click at the folder, choose 'New terminal at folder'

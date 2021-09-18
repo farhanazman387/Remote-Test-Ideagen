@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Filter from './filter';
 
 class Order extends Component{
     
@@ -7,14 +8,15 @@ class Order extends Component{
         this.state = {
             error:null,
             isLoaded: false,
-            orders: []
+            orders: [],
+            popUp: false
         };
     }
 
     componentDidMount(){
-        //get all data
+        //get all data using promise
         fetch('./config.json')
-        .then(res => res.json())
+        .then(res => res.json())//parse jason
         .then(
             (result) => {
                 this.setState({
@@ -31,16 +33,36 @@ class Order extends Component{
         )
     }
 
-    render(){
+    handlePopup = () =>{
+        this.setState({
+            popUp: !this.state.popUp
+        });
+    };
 
+    handleApplyFilter = () =>{
+        //in progress
+    };
+
+    render(){
+        //checking if the data is not null, or if there is any error while getting data
         const { error, isLoaded, orders } = this.state;
         if (error) {
-            return<div>Erreor: {error.message}</div>
+            return<div>Error: {error.message}</div>
         }else if (!isLoaded){
-            return <div>Loading...</div>
+            return <div>Fetching data...</div>
         }else{
             return(
-                <div>
+                <div style={{width:'100%'}}>
+                    <div style={{alignItems:'end', textAlign:'end', paddingTop:30, 
+                    paddingBottom:30, paddingRight:100}}>
+                        <button type='button' style={{width:'100', height:'30', 
+                        fontSize:15}} onClick={this.handlePopup}>Filter data</button>
+                    </div>
+                    <div>
+                        {
+                            this.state.popUp ? <Filter toggle={this.handlePopup} /> : null
+                        }
+                    </div>
                     <table style={{textAlign:'center'}}>
                         <thead>
                             <tr>
