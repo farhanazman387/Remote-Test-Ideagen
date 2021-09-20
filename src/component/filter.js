@@ -199,9 +199,9 @@ const Filter = (props) =>{
                                     <td>
                                         Display date
                                         from
-                                        <input type="text" />
+                                        <input id="from" type="date" />
                                         to
-                                        <input type="text" />
+                                        <input id="to" type="date" />
                                     </td>
                                 </tr>
                                 <tr style={{height:15}}>
