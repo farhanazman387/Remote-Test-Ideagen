@@ -52,41 +52,45 @@ const Filter = (props) =>{
             return true;
         }
     }
-
+    //for select value
     const updateValue = (objName,newValue) => {
-        var index = filters.findIndex(i => i.type === objName);
-
+        var index = filters.findIndex(i => i.type == objName);
+        
         let row = filters[index];
         let updateRow = row["value"];
         updateRow = newValue;
-        row["value"] = updateRow;
+        row["value"]=updateRow;
+
         if (index === -1) {
-            alert('Selelct option for Customer Name');
+            alert('Selelct Main option for ' + objName);
         }
         else{
             setFilters([
                 ...filters.slice(0,index),
-                row
+                row,
+                ...filters.slice(index + 1)
             ]);
         }
     }
-
-    const updateCheckboxValue = (objName,newValue) => {
-        var index = filters.findIndex(i => i.type === objName);
+    //for multiple checkbox value
+    const updateMultipleValue = (objName,newValue) => {
+        var index = filters.findIndex(i => i.type == objName);
 
         let row = filters[index];
         let updateRow = row["value"];
         updateRow = updateRow.concat(newValue);
         row["value"] = updateRow;
         if (index === -1) {
-            alert('Selelct option for Customer Name');
+            alert('Selelct Main option for ' + objName);
         }
         else{
             setFilters([
                 ...filters.slice(0,index),
-                row
+                row,
+                ...filters.slice(index + 1)
             ]);
         }
+        // console.log(filters);
     }
 
     const handleChange = e => {
@@ -95,8 +99,8 @@ const Filter = (props) =>{
         let checkedId = e.target.id;
         var filter = [];
         if(checkedId.includes('main')){
-            let isExist = checkExist(checkedVal);
             if(isCheck){
+                let isExist = checkExist(checkedVal);
                 if(isExist){
                     alert('this option exist');
                 }
@@ -113,64 +117,64 @@ const Filter = (props) =>{
             }
         }
         else{
-            let isMainExist=false;
             if (checkedId.includes('customers')){
                 //select value
-                filter.push(checkedVal);
-
-                isMainExist = checkExist("customer_name");
-                if (isMainExist){
-                    //update the value
-                    updateValue("customer_name",filter);
-                }
-                else{
-                    alert('Selelct option for Customer Name');
-                }
+                // filter.push(checkedVal);
+                let isMainExist = checkExist("customer_name");
+                    if (isMainExist){
+                        //update the value
+                        updateValue("customer_name",checkedVal);
+                    }
+                    else{
+                        alert('Selelct main option for Customer Name');
+                    }
             }
             else if (checkedId.includes('status')){
                 //checkbox
                 filter.push(checkedVal);
-
-                isMainExist = checkExist("status");
-                if (isMainExist){
-                    //update the value
-                    updateCheckboxValue("status",filter);
-                }
-                else{
-                    alert('Selelct option for Status');
+                if(isCheck){
+                    let isMainExist = checkExist("status");
+                    if (isMainExist){
+                        //update the value
+                        updateMultipleValue("status",filter);
+                    }
+                    else{
+                        alert('Selelct main option for Status');
+                    }
                 }
             }
             else if (checkedId.includes('category')){
                 //checkbox
                 filter.push(checkedVal);
-
-                isMainExist = checkExist("category");
-                if (isMainExist){
-                    //update the value
-                    updateCheckboxValue("category",filter);
-                }
-                else{
-                    alert('Selelct option for Category');
+                if(isCheck){
+                    let isMainExist = checkExist("category");
+                    if (isMainExist){
+                        //update the value
+                        updateMultipleValue("category",filter);
+                    }
+                    else{
+                        alert('Selelct main option for Category');
+                    }
                 }
             }
             else if (checkedId.includes('country')){
                 //select value
-                filter.push(checkedVal);
-
-                isMainExist = checkExist("country");
-                if (isMainExist){
-                    //update the value
-                    updateValue("country",filter);
-                }
-                else{
-                    alert('Selelct option for Country');
-                }
+                // filter.push(checkedVal);
+                let isMainExist = checkExist("country");
+                    if (isMainExist){
+                        //update the value
+                        updateValue("country",checkedVal);
+                    }
+                    else{
+                        alert('Selelct main option for Country');
+                    }
             }
             else{
                 alert('Error: Ambigous value');
             }
         }
         //end
+        // console.log(filters);
         //push into an array and check if the data is in the array
     }
 
@@ -205,7 +209,8 @@ const Filter = (props) =>{
                                         <input type='checkbox' id="customersmain" name="customersmain" value="customer_name" onChange={e => handleChange(e)}/>
                                         <label for="customersmain">Customer Name</label></td>
                                     <td>
-                                        <select id="customers" name="customersopt" onChange={e => handleChange(e)}>
+                                        <select id="customers" name="customers" onChange={e => handleChange(e)}>
+                                            <option>select names</option>
                                             <option value="All">All</option>
                                             {
                                                 uCustomers.map((names) => {
@@ -231,7 +236,7 @@ const Filter = (props) =>{
                                                 return(
                                                     <div id="statusopt" style={{display:'flex', alignItems:'center'}}>
                                                         <input type='checkbox' id={'status' + status} value={status} onChange={e=> handleChange(e)}/>
-                                                        <label for={status}>{status}</label>
+                                                        <label for={'satus' + status}>{status}</label>
                                                     </div>
                                                 );
                                             })
@@ -251,7 +256,7 @@ const Filter = (props) =>{
                                                 return(
                                                     <div id="categoryopt" style={{display:'flex', alignItems:'center'}}>
                                                         <input type='checkbox' id={'category' + category} value={category} onChange={e=> handleChange(e)}/>
-                                                        <label for={category}>{category}</label>
+                                                        <label for={'category' + category}>{category}</label>
                                                     </div>
                                                 );
                                             })
@@ -264,7 +269,8 @@ const Filter = (props) =>{
                                         <label for="countrymain">Country</label>
                                     </td>
                                     <td>
-                                        <select id="country" name="countryopt">
+                                        <select id="country" name="country" onChange={e => handleChange(e)}>
+                                            <option>select country</option>
                                             <option value="All">All</option>
                                             {
                                                 uCountry.map(country => (
@@ -291,6 +297,10 @@ const Filter = (props) =>{
         props.onGetFilter(filters);
         props.toggle();
     }
+    const cancelFilter = () =>{
+        alert("Are you sure you want to leave the filter?");
+        props.toggle();
+    }
     return(
         <div style={{width:'100%'}}>
             <div id="popupFilter" style={{display:'flex',
@@ -314,7 +324,7 @@ const Filter = (props) =>{
                             <div>
                                 {/* <Apply onClick={props.onGetFilter}/> */}
                                 <button onClick={getFilters}>Apply</button>
-                                <button >Cancel</button>
+                                <button onClick={cancelFilter}>Cancel</button>
                             </div>
                         </div>
                     </div>

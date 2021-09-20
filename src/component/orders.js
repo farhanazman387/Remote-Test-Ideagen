@@ -9,7 +9,8 @@ class Order extends Component{
             error:null,
             isLoaded: false,
             orders: [],
-            popUp: false
+            popUp: false,
+            filteredResult: []
         };
         this.handleApplyFilter = this.handleApplyFilter.bind(this);
     }
@@ -40,20 +41,44 @@ class Order extends Component{
         });
     };
 
+    isExist = (objName,array) =>{
+        var index = array.findIndex(i => i.type == objName);
+
+        if(index === -1){
+            return false;
+        }
+        else{
+            return true
+        }
+    }
+
     handleApplyFilter = (filterList) =>{
         //this funtion will recieve an array of filter option chose by user
         //this function will handle each condiotion to meet the requirement/query
-        console.log(filterList);
+        
+        //no 1  
+        this.state.filteredResult = this.state.orders
+        .filter(oriTable => filterList
+        .some(filterVal => oriTable[filterVal.type] === filterVal.value));
+
+        // console.log(this.state.filteredResult);
     };
 
     render(){
         //checking if the data is not null, or if there is any error while getting data
-        const { error, isLoaded, orders } = this.state;
+        const { error, isLoaded, orders, filteredResult } = this.state;
+        let temporaryResult=[];
         if (error) {
             return<div>Error: {error.message}</div>
         }else if (!isLoaded){
             return <div>Fetching data...</div>
         }else{
+            if (filteredResult.length>0){
+                temporaryResult = filteredResult;
+            }
+            else{
+                temporaryResult = orders;
+            }
             return(
                 <div style={{width:'100%'}}>
                     <div style={{alignItems:'end', textAlign:'end', paddingTop:30, 
@@ -92,7 +117,7 @@ class Order extends Component{
                             </tr>
                         </thead>
                         <tbody>
-                            {orders.map(item =>(
+                            {temporaryResult.map(item =>(
                                 <tr>
                                     <td style={{width:'200'}}>
                                         {item.order_no}
