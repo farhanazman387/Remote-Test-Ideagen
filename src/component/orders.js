@@ -16,9 +16,8 @@ class Order extends Component{
     }
 
     componentDidMount(){
-        //get all data using promise
         fetch('./config.json')
-        .then(res => res.json())//parse jason
+        .then(res => res.json())
         .then(
             (result) => {
                 this.setState({
@@ -53,19 +52,12 @@ class Order extends Component{
     }
 
     handleApplyFilter = (filterList) =>{
-        //this funtion will recieve an array of filter option chose by user
-        //this function will handle each condiotion to meet the requirement/query
-        
-        //no 1  
         this.state.filteredResult = this.state.orders
         .filter(oriTable => filterList
         .some(filterVal => oriTable[filterVal.type] === filterVal.value));
-
-        // console.log(this.state.filteredResult);
     };
 
     render(){
-        //checking if the data is not null, or if there is any error while getting data
         const { error, isLoaded, orders, filteredResult } = this.state;
         let temporaryResult=[];
         if (error) {

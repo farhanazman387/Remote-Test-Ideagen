@@ -41,3 +41,77 @@ var newIsChecked = new Array(uStatus.length).fill(false);
     // const [isCheckecCou, setIsCheckecCou] = useState();
 
     const [isChecked, setIsChecked] = useState([]);
+
+    switch(checkedId){
+                case 'datemain':
+                    setFilters([...filters,{
+                        type:checkedVal,
+                        value:filter
+                    }]);
+                    break;
+                case 'customersmain':
+                    setFilters([...filters,{
+                        type:checkedVal,
+                        value:filter
+                    }]);
+                    console.log('filters set');
+                    break;
+                case 'statusmain':
+                    setFilters([...filters,{
+                        type:checkedVal,
+                        value:filter
+                    }]);
+                    break;
+                case 'categorymain':
+                    setFilters([...filters,{
+                        type:checkedVal,
+                        value:filter
+                    }]);
+                    break;
+                case 'countrymain':
+                    setFilters([...filters,{
+                        type:checkedVal,
+                        value:filter
+                    }]);
+                    break;
+                default:
+                    break;
+            }
+
+
+                // objIndex = filters.findIndex((obj => obj.type == "customer_name"));
+                // if(objIndex != null || objIndex < 0){
+                //     // filters[objIndex].value.push(checkedVal);
+                //     filters[objIndex].value = filter;
+                //     console.log(filters);
+                // }
+
+
+
+    const handleOptChange = e => {
+        let selectedVal = e.target.value;
+        let idSelect = e.target.id;
+    }
+
+     //no 2
+        this.state.filteredResult = this.state.orders.filter(function(oritable) {
+            for (var key in filterList) {
+                console.log(oritable[key]);
+                console.log(filterList[key]);
+                if (oritable[key] === undefined || oritable[key] != filterList[key])
+                    return false;
+                }
+                return true;
+            });
+
+// createdDate
+        // this.state.filteredResult = array.filter(e => e.createdDate >= x && e.createdDate <= y)
+        //check exist in filter
+        // let isCNexist=this.isExist("customer_name",filterList);
+        // if(isCNexist){
+        //     var index = filterList.findIndex(i => i.type === "customer_name");
+        
+        //     let row = filterList[index];
+        //     let customer = row["value"];
+        //     this.state.filteredResult = this.state.orders.filter(e => e.customer_name === customer);
+        // }

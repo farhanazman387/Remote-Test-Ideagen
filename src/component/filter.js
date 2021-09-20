@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-// import Apply from './apply';
 
-//in this part i will use functional component to use hooks
 const Filter = (props) =>{
     const [filters, setFilters] = useState([
         {
@@ -9,7 +7,6 @@ const Filter = (props) =>{
             value: []
         }
     ]);
-
     const [order, setOrder] = useState([]);
     const [isLoaded, setIsLoded] = useState(false);
     const [hasError, setHasError] = useState(false);
@@ -29,18 +26,15 @@ const Filter = (props) =>{
             setHasError(true);
             alert("Error   :  " + hasError + "  :  " + error);
         })
-    }, [])//Preventing Endless Callbacks using Dependencies
+    }, [])
 
     const getUnique = (objName) => {
-
-                // store the values in array
                 const unique =  [];
                 Object.keys(order).forEach(key =>{
                     unique.push(order[key][objName]);
                 });
                 const newUnique = Array.from(new Set(unique));
                 return newUnique;
-                // return unique;
     }
 
     const checkExist= (objName) =>{
@@ -52,7 +46,6 @@ const Filter = (props) =>{
             return true;
         }
     }
-    //for select value
     const updateValue = (objName,newValue) => {
         var index = filters.findIndex(i => i.type == objName);
         
@@ -72,7 +65,6 @@ const Filter = (props) =>{
             ]);
         }
     }
-    //for multiple checkbox value
     const updateMultipleValue = (objName,newValue) => {
         var index = filters.findIndex(i => i.type == objName);
 
@@ -90,7 +82,6 @@ const Filter = (props) =>{
                 ...filters.slice(index + 1)
             ]);
         }
-        // console.log(filters);
     }
 
     const handleChange = e => {
@@ -112,17 +103,14 @@ const Filter = (props) =>{
                 }
             }
             else{
-                //the user unchecked this option, delete
                 setFilters(filters.filter(item => item.type !== checkedVal));
             }
         }
         else{
             if (checkedId.includes('customers')){
-                //select value
-                // filter.push(checkedVal);
                 let isMainExist = checkExist("customer_name");
                     if (isMainExist){
-                        //update the value
+                        
                         updateValue("customer_name",checkedVal);
                     }
                     else{
@@ -130,12 +118,10 @@ const Filter = (props) =>{
                     }
             }
             else if (checkedId.includes('status')){
-                //checkbox
                 filter.push(checkedVal);
                 if(isCheck){
                     let isMainExist = checkExist("status");
                     if (isMainExist){
-                        //update the value
                         updateMultipleValue("status",filter);
                     }
                     else{
@@ -144,12 +130,10 @@ const Filter = (props) =>{
                 }
             }
             else if (checkedId.includes('category')){
-                //checkbox
                 filter.push(checkedVal);
                 if(isCheck){
                     let isMainExist = checkExist("category");
                     if (isMainExist){
-                        //update the value
                         updateMultipleValue("category",filter);
                     }
                     else{
@@ -158,11 +142,8 @@ const Filter = (props) =>{
                 }
             }
             else if (checkedId.includes('country')){
-                //select value
-                // filter.push(checkedVal);
                 let isMainExist = checkExist("country");
                     if (isMainExist){
-                        //update the value
                         updateValue("country",checkedVal);
                     }
                     else{
@@ -173,14 +154,10 @@ const Filter = (props) =>{
                 alert('Error: Ambigous value');
             }
         }
-        //end
-        // console.log(filters);
-        //push into an array and check if the data is in the array
     }
 
     const getDataForFilters = () => {
         if (isLoaded){
-            //remove duplicate value
             const uCustomers = getUnique("customer_name");
             const uStatus = getUnique("status");
             const uCategory = getUnique("category");
@@ -210,8 +187,8 @@ const Filter = (props) =>{
                                         <label for="customersmain">Customer Name</label></td>
                                     <td>
                                         <select id="customers" name="customers" onChange={e => handleChange(e)}>
-                                            <option>select names</option>
-                                            <option value="All">All</option>
+                                            
+                                            <option value="All" selected>All</option>
                                             {
                                                 uCustomers.map((names) => {
                                                     return(
@@ -229,7 +206,7 @@ const Filter = (props) =>{
                                     </td>
                                     <td style={{display:'flex'}}>
                                         <input type='checkbox' id="allstatus" value="All" onChange={e=> handleChange(e)}/>
-                                        <label for="allstatus">All</label>
+                                        <label for="allstatus" >All</label>
                                         {
                                             uStatus.map((status) => {
 
@@ -270,8 +247,8 @@ const Filter = (props) =>{
                                     </td>
                                     <td>
                                         <select id="country" name="country" onChange={e => handleChange(e)}>
-                                            <option>select country</option>
-                                            <option value="All">All</option>
+                                            
+                                            <option value="All" selected>All</option>
                                             {
                                                 uCountry.map(country => (
                                                     <option value={country}>{country}</option>
@@ -293,7 +270,6 @@ const Filter = (props) =>{
     }
 
     const getFilters = () =>{
-        //add all information into filters
         props.onGetFilter(filters);
         props.toggle();
     }
@@ -304,7 +280,6 @@ const Filter = (props) =>{
     return(
         <div style={{width:'100%'}}>
             <div id="popupFilter" style={{display:'flex',
-            // backgroundColor:'#555', 
             alignItems:'center', paddingTop:0, paddingLeft:50, paddingRight:50, 
             paddingBottom:50,alignContent:'center', width:'80%', height:'auto',
             justifyContent:'center', flexDirection:'row', position:'absolute',
@@ -335,7 +310,3 @@ const Filter = (props) =>{
 }
 
 export default Filter;
-
-// const styles= StyleSheet.create({
-
-// });
