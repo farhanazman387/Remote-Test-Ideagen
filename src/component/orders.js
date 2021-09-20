@@ -11,6 +11,7 @@ class Order extends Component{
             orders: [],
             popUp: false
         };
+        this.handleApplyFilter = this.handleApplyFilter.bind(this);
     }
 
     componentDidMount(){
@@ -39,8 +40,10 @@ class Order extends Component{
         });
     };
 
-    handleApplyFilter = () =>{
-        //in progress
+    handleApplyFilter = (filterList) =>{
+        //this funtion will recieve an array of filter option chose by user
+        //this function will handle each condiotion to meet the requirement/query
+        console.log(filterList);
     };
 
     render(){
@@ -60,7 +63,9 @@ class Order extends Component{
                     </div>
                     <div>
                         {
-                            this.state.popUp ? <Filter toggle={this.handlePopup} /> : null
+                            this.state.popUp ? 
+                            <Filter toggle={this.handlePopup} onGetFilter={this.handleApplyFilter}/> 
+                            : null
                         }
                     </div>
                     <table style={{textAlign:'center'}}>

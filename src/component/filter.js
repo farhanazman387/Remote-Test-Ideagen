@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import Apply from './apply';
+// import Apply from './apply';
 
 //in this part i will use functional component to use hooks
-const Filter = () =>{
+const Filter = (props) =>{
+    const [filters, setFilters] = useState([
+        {
+            type:"",
+            value: []
+        }
+    ]);
+
     const [order, setOrder] = useState([]);
     const [isLoaded, setIsLoded] = useState(false);
     const [hasError, setHasError] = useState(false);
@@ -20,6 +27,7 @@ const Filter = () =>{
         )
         .catch(error => {
             setHasError(true);
+            alert("Error   :  " + hasError + "  :  " + error);
         })
     }, [])//Preventing Endless Callbacks using Dependencies
 
@@ -30,20 +38,149 @@ const Filter = () =>{
                 Object.keys(order).forEach(key =>{
                     unique.push(order[key][objName]);
                 });
-                return unique;
+                const newUnique = Array.from(new Set(unique));
+                return newUnique;
+                // return unique;
     }
+
+    const checkExist= (objName) =>{
+        var index = filters.findIndex(i => i.type === objName);
+        if( index === -1){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+    const updateValue = (objName,newValue) => {
+        var index = filters.findIndex(i => i.type === objName);
+
+        let row = filters[index];
+        let updateRow = row["value"];
+        updateRow = newValue;
+        row["value"] = updateRow;
+        if (index === -1) {
+            alert('Selelct option for Customer Name');
+        }
+        else{
+            setFilters([
+                ...filters.slice(0,index),
+                row
+            ]);
+        }
+    }
+
+    const updateCheckboxValue = (objName,newValue) => {
+        var index = filters.findIndex(i => i.type === objName);
+
+        let row = filters[index];
+        let updateRow = row["value"];
+        updateRow = updateRow.concat(newValue);
+        row["value"] = updateRow;
+        if (index === -1) {
+            alert('Selelct option for Customer Name');
+        }
+        else{
+            setFilters([
+                ...filters.slice(0,index),
+                row
+            ]);
+        }
+    }
+
+    const handleChange = e => {
+        let isCheck = e.target.checked;
+        let checkedVal = e.target.value;
+        let checkedId = e.target.id;
+        var filter = [];
+        if(checkedId.includes('main')){
+            let isExist = checkExist(checkedVal);
+            if(isCheck){
+                if(isExist){
+                    alert('this option exist');
+                }
+                else{
+                    setFilters([...filters,{
+                        type:checkedVal,
+                        value:filter
+                    }]);
+                }
+            }
+            else{
+                //the user unchecked this option, delete
+                setFilters(filters.filter(item => item.type !== checkedVal));
+            }
+        }
+        else{
+            let isMainExist=false;
+            if (checkedId.includes('customers')){
+                //select value
+                filter.push(checkedVal);
+
+                isMainExist = checkExist("customer_name");
+                if (isMainExist){
+                    //update the value
+                    updateValue("customer_name",filter);
+                }
+                else{
+                    alert('Selelct option for Customer Name');
+                }
+            }
+            else if (checkedId.includes('status')){
+                //checkbox
+                filter.push(checkedVal);
+
+                isMainExist = checkExist("status");
+                if (isMainExist){
+                    //update the value
+                    updateCheckboxValue("status",filter);
+                }
+                else{
+                    alert('Selelct option for Status');
+                }
+            }
+            else if (checkedId.includes('category')){
+                //checkbox
+                filter.push(checkedVal);
+
+                isMainExist = checkExist("category");
+                if (isMainExist){
+                    //update the value
+                    updateCheckboxValue("category",filter);
+                }
+                else{
+                    alert('Selelct option for Category');
+                }
+            }
+            else if (checkedId.includes('country')){
+                //select value
+                filter.push(checkedVal);
+
+                isMainExist = checkExist("country");
+                if (isMainExist){
+                    //update the value
+                    updateValue("country",filter);
+                }
+                else{
+                    alert('Selelct option for Country');
+                }
+            }
+            else{
+                alert('Error: Ambigous value');
+            }
+        }
+        //end
+        //push into an array and check if the data is in the array
+    }
+
     const getDataForFilters = () => {
-        // let tempArr = [];
         if (isLoaded){
-            // Object.keys(order).forEach(key =>{
-            //     tempArr.push(order[key]['customer_name']);
-            // });
-            // let newArr = Array.from(new Set(tempArr));
             //remove duplicate value
-            const uCustomers = Array.from(new Set(getUnique("customer_name")));
-            const uStatus = Array.from(new Set(getUnique("status")));
-            const uCategory = Array.from(new Set(getUnique("category")));
-            const uCountry = Array.from(new Set(getUnique("country")));
+            const uCustomers = getUnique("customer_name");
+            const uStatus = getUnique("status");
+            const uCategory = getUnique("category");
+            const uCountry = getUnique("country");
             return (
                             <table>
                                 <tr style={{height:15}}>
@@ -52,8 +189,8 @@ const Filter = () =>{
                                 </tr>
                                 <tr style={{height:15}}>
                                     <td>
-                                        <input type='checkbox' id="date" name="date"/>
-                                        <label for="date">Created Date</label>
+                                        <input type='checkbox' id="datemain" name="date" value="created_date" onChange={e => handleChange(e)}/>
+                                        <label for="datemain">Created Date</label>
                                     </td>
                                     <td>
                                         Display date
@@ -65,10 +202,10 @@ const Filter = () =>{
                                 </tr>
                                 <tr style={{height:15}}>
                                     <td>
-                                        <input type='checkbox' id="customers" name="customers"/>
-                                        <label for="customers">Customer Name</label></td>
+                                        <input type='checkbox' id="customersmain" name="customersmain" value="customer_name" onChange={e => handleChange(e)}/>
+                                        <label for="customersmain">Customer Name</label></td>
                                     <td>
-                                        <select name="customersopt">
+                                        <select id="customers" name="customersopt" onChange={e => handleChange(e)}>
                                             <option value="All">All</option>
                                             {
                                                 uCustomers.map((names) => {
@@ -82,17 +219,18 @@ const Filter = () =>{
                                 </tr>
                                 <tr style={{height:15}}>
                                     <td>
-                                        <input type='checkbox' id="status" name="status"/>
-                                        <label for="status">Status</label>
+                                        <input type='checkbox' id="statusmain" name="statusmain" value="status" onChange={e => handleChange(e)}/>
+                                        <label for="statusmain">Status</label>
                                     </td>
                                     <td style={{display:'flex'}}>
-                                        <input type='checkbox' id="AllStatus" value="AllStatus"/>
-                                        <label for="AllStatus">All</label>
+                                        <input type='checkbox' id="allstatus" value="All" onChange={e=> handleChange(e)}/>
+                                        <label for="allstatus">All</label>
                                         {
                                             uStatus.map((status) => {
+
                                                 return(
-                                                    <div style={{display:'flex', alignItems:'center'}}>
-                                                        <input type='checkbox' id={status} value={status}/>
+                                                    <div id="statusopt" style={{display:'flex', alignItems:'center'}}>
+                                                        <input type='checkbox' id={'status' + status} value={status} onChange={e=> handleChange(e)}/>
                                                         <label for={status}>{status}</label>
                                                     </div>
                                                 );
@@ -102,8 +240,8 @@ const Filter = () =>{
                                 </tr>
                                 <tr style={{height:15}}>
                                     <td>
-                                        <input type='checkbox' id="category" name="category"/>
-                                        <label for="category">Status</label>
+                                        <input type='checkbox' id="categorymain" name="category" value="category" onChange={e => handleChange(e)}/>
+                                        <label for="categorymain">Category</label>
                                     </td>
                                     <td style={{display:'flex'}}>
                                         <input type='checkbox' id="AllCat" value="AllCat"/>
@@ -111,8 +249,8 @@ const Filter = () =>{
                                         {
                                             uCategory.map((category) => {
                                                 return(
-                                                    <div style={{display:'flex', alignItems:'center'}}>
-                                                        <input type='checkbox' id={category} value={category}/>
+                                                    <div id="categoryopt" style={{display:'flex', alignItems:'center'}}>
+                                                        <input type='checkbox' id={'category' + category} value={category} onChange={e=> handleChange(e)}/>
                                                         <label for={category}>{category}</label>
                                                     </div>
                                                 );
@@ -122,11 +260,11 @@ const Filter = () =>{
                                 </tr>
                                 <tr style={{height:15}}>
                                     <td>
-                                        <input type='checkbox' name="country" id="country"/>
-                                        <label for="country">Country</label>
+                                        <input type='checkbox' name="country" id="countrymain" value="country" onChange={e => handleChange(e)}/>
+                                        <label for="countrymain">Country</label>
                                     </td>
                                     <td>
-                                        <select name="countryopt">
+                                        <select id="country" name="countryopt">
                                             <option value="All">All</option>
                                             {
                                                 uCountry.map(country => (
@@ -146,6 +284,12 @@ const Filter = () =>{
                         {' '}
                     </div>);
         }
+    }
+
+    const getFilters = () =>{
+        //add all information into filters
+        props.onGetFilter(filters);
+        props.toggle();
     }
     return(
         <div style={{width:'100%'}}>
@@ -167,8 +311,9 @@ const Filter = () =>{
                             <div style={{width:'80%'}}>
                                 <button >Reset</button>
                             </div>
-                            <div style={{display:'flex'}}>
-                                <Apply />
+                            <div>
+                                {/* <Apply onClick={props.onGetFilter}/> */}
+                                <button onClick={getFilters}>Apply</button>
                                 <button >Cancel</button>
                             </div>
                         </div>

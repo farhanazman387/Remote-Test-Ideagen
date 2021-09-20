@@ -1,0 +1,43 @@
+from filter
+
+if (checkedId.includes("all")){
+            //replace and get new id for its element
+            var newId = checkedId.replace('all','');
+            newId = '#' + newId + 'opt';
+            $(newId).each((index,elem) => {
+                elementId
+                .push(elem.id);
+            });
+            console.log(elementId);
+            if(isCheck){
+                elementId.forEach((cbElem,i) => {
+                    $('#'+cbElem).setAttribute('checked','true');
+                });
+                //check all other element and store in array
+            }
+            else{
+                elementId.forEach((cbElem,i) => {
+                    $('#'+cbElem).setAttribute('checked','false');
+                });
+                //uncheck all other element
+            }
+        }
+
+        const [checkedState, setCheckedState] = useState(
+    new Array(toppings.length).fill(false)
+);
+
+var newIsChecked = new Array(uStatus.length).fill(false);
+
+            setIsChecked(isChecked.concat(newIsChecked));
+            console.log(isChecked);
+
+    // const [dataFilters, setDataFilters] = useState([]);
+
+    // const [isCheckecCD, setIsCheckecCD] = useState();
+    // const [isCheckecCN, setIsCheckecCN] = useState();
+    // const [isCheckecS, setIsCheckecS] = useState();
+    // const [isCheckecCat, setIsCheckecCat] = useState();
+    // const [isCheckecCou, setIsCheckecCou] = useState();
+
+    const [isChecked, setIsChecked] = useState([]);
